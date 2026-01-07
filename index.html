@@ -37,6 +37,7 @@
         // Initialisation au chargement de la page
         document.addEventListener('DOMContentLoaded', async () => {
             // Éléments DOM
+            const splashScreen = document.getElementById('splash-screen');
             const loginPage = document.getElementById('login-page');
             const welcomePage = document.getElementById('welcome-page');
             const loginForm = document.getElementById('login-form');
@@ -46,6 +47,14 @@
             const welcomeMessage = document.getElementById('welcome-message');
             const userIdElement = document.getElementById('user-id');
             const logoutBtn = document.getElementById('logout-btn');
+
+            // Animation de chargement initiale (2 secondes)
+            setTimeout(() => {
+                splashScreen.classList.add('fade-out');
+                setTimeout(() => {
+                    splashScreen.classList.add('hidden');
+                }, 500);
+            }, 2000);
 
             // Fonction pour afficher la page login
             function showLogin() {
@@ -193,14 +202,35 @@
     </script>
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
             min-height: 100vh;
             font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(0, 255, 157, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            animation: pulse 15s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
         .glassmorphism {
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(16px) saturate(180%);
+            background: rgba(17, 25, 40, 0.75);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 255, 255, 0.1);
         }
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
@@ -209,11 +239,54 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        .fade-out {
+            animation: fadeOut 0.5s ease-in-out forwards;
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        .logo-pulse {
+            animation: logoPulse 2s ease-in-out infinite;
+        }
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.8)); }
+        }
+        .tech-border {
+            position: relative;
+        }
+        .tech-border::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #00ffff, #00ff9d, #8a2be2, #00ffff);
+            background-size: 300% 300%;
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+            animation: gradientFlow 3s ease infinite;
+        }
+        .tech-border:hover::before {
+            opacity: 0.3;
+        }
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
     </style>
 </head>
 <body class="dark bg-gray-900 text-white">
+    <!-- Écran de chargement -->
+    <div id="splash-screen" class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="text-center">
+            <img src="assets/img/Logo Ivony.png" alt="Logo Ivony" class="h-32 w-auto mx-auto logo-pulse">
+        </div>
+    </div>
+
     <!-- Page Login -->
-    <div id="login-page" class="flex items-center justify-center min-h-screen px-4">
+    <div id="login-page" class="hidden flex items-center justify-center min-h-screen px-4">
         <div class="glassmorphism rounded-2xl p-8 w-full max-w-md shadow-2xl fade-in">
             <!-- Logo -->
             <div class="flex justify-center mb-8">
@@ -221,23 +294,23 @@
             </div>
             <form id="login-form" class="space-y-6">
                 <div>
-                    <label for="email" class="block text-sm font-medium mb-2">Email</label>
+                    <label for="email" class="block text-sm font-medium mb-2 text-cyan-300">Email</label>
                     <input type="email" id="email" required
-                           class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 placeholder-gray-400"
+                           class="w-full px-4 py-3 bg-slate-900/50 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-300 placeholder-gray-500 text-white"
                            placeholder="votre@email.com">
                 </div>
                 <div>
-                    <label for="password" class="block text-sm font-medium mb-2">Mot de passe</label>
+                    <label for="password" class="block text-sm font-medium mb-2 text-cyan-300">Mot de passe</label>
                     <input type="password" id="password" required
-                           class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 placeholder-gray-400"
+                           class="w-full px-4 py-3 bg-slate-900/50 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-300 placeholder-gray-500 text-white"
                            placeholder="••••••••">
                 </div>
                 <button type="submit"
-                        class="w-full py-3 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900">
+                        class="tech-border w-full py-3 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-400 shadow-lg shadow-cyan-500/50">
                     Se connecter
                 </button>
             </form>
-            <div id="login-error" class="mt-4 text-red-400 text-sm text-center hidden"></div>
+            <div id="login-error" class="mt-4 text-red-300 text-sm text-center hidden bg-red-500/10 border border-red-500/30 rounded-lg p-3"></div>
         </div>
     </div>
 
@@ -248,14 +321,14 @@
             <div class="flex justify-center mb-6">
                 <img src="assets/img/Logo Ivony.png" alt="Logo Ivony" class="h-20 w-auto">
             </div>
-            <h1 class="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            <h1 class="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
                 Ivony
             </h1>
             <div class="text-center space-y-4">
-                <p id="welcome-message" class="text-lg"></p>
-                <p id="user-id" class="text-sm text-gray-300"></p>
+                <p id="welcome-message" class="text-lg text-cyan-100"></p>
+                <p id="user-id" class="text-sm text-gray-400"></p>
                 <button id="logout-btn"
-                        class="w-full py-3 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900">
+                        class="tech-border w-full py-3 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 shadow-lg shadow-red-500/50">
                     Déconnexion
                 </button>
             </div>
