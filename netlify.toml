@@ -1,0 +1,71 @@
+# Configuration Netlify - Ivony
+# Copier ce fichier à la racine du projet pour déployer sur Netlify
+
+# Configuration du build
+[build]
+  # Dossier contenant les fichiers statiques (si pas de build)
+  publish = "."
+  
+  # Commande de build (laisser vide si pas de build process)
+  command = ""
+
+# Headers de sécurité
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Empêche l'embedding dans une iframe
+    X-Frame-Options = "DENY"
+    
+    # Force le type MIME déclaré
+    X-Content-Type-Options = "nosniff"
+    
+    # Active la protection XSS du navigateur
+    X-XSS-Protection = "1; mode=block"
+    
+    # Politique de référent stricte
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    
+    # Désactive les features non utilisées
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=()"
+    
+    # Force HTTPS (HSTS) - 1 an
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    
+    # Content Security Policy (à ajuster selon vos besoins)
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://jzabkrztgkayunjbzlzj.supabase.co; style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net; connect-src 'self' https://jzabkrztgkayunjbzlzj.supabase.co https://api.ipify.org https://ipapi.co; img-src 'self' data: https:; font-src 'self' data:; frame-ancestors 'none';"
+
+# Cache des assets statiques
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Pas de cache pour les HTML
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Redirections (si nécessaire)
+[[redirects]]
+  from = "/login"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/dashboard"
+  to = "/applications.html"
+  status = 200
+
+# Force HTTPS
+[[redirects]]
+  from = "http://*"
+  to = "https://:splat"
+  status = 301
+  force = true
+
+# Gestion 404
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 404

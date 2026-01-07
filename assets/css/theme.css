@@ -1,0 +1,245 @@
+/* ========================================
+   VARIABLES CSS - DARK & LIGHT MODE
+   ======================================== */
+
+:root {
+    /* Light Mode Colors */
+    --light-bg-primary: #f8fafc;
+    --light-bg-secondary: #ffffff;
+    --light-bg-gradient-start: #e0e7ff;
+    --light-bg-gradient-mid: #ddd6fe;
+    --light-bg-gradient-end: #fce7f3;
+    --light-text-primary: #0f172a;
+    --light-text-secondary: #475569;
+    --light-text-muted: #64748b;
+    --light-border: #e2e8f0;
+    --light-border-accent: rgba(6, 182, 212, 0.3);
+    --light-glass-bg: rgba(255, 255, 255, 0.8);
+    --light-glass-border: rgba(6, 182, 212, 0.2);
+    --light-shadow: rgba(0, 0, 0, 0.1);
+    
+    /* Dark Mode Colors */
+    --dark-bg-primary: #0f172a;
+    --dark-bg-secondary: #1e293b;
+    --dark-bg-gradient-start: #0f0c29;
+    --dark-bg-gradient-mid: #302b63;
+    --dark-bg-gradient-end: #24243e;
+    --dark-text-primary: #f1f5f9;
+    --dark-text-secondary: #cbd5e1;
+    --dark-text-muted: #94a3b8;
+    --dark-border: #334155;
+    --dark-border-accent: rgba(0, 255, 255, 0.2);
+    --dark-glass-bg: rgba(17, 25, 40, 0.75);
+    --dark-glass-border: rgba(0, 255, 255, 0.2);
+    --dark-shadow: rgba(0, 255, 255, 0.1);
+}
+
+/* ========================================
+   MODE SELECTOR
+   ======================================== */
+
+/* Light Mode */
+body.light {
+    background: linear-gradient(135deg, var(--light-bg-gradient-start) 0%, var(--light-bg-gradient-mid) 50%, var(--light-bg-gradient-end) 100%);
+    color: var(--light-text-primary);
+}
+
+body.light::before {
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(34, 197, 94, 0.12) 0%, transparent 50%);
+}
+
+body.light .glassmorphism {
+    backdrop-filter: blur(16px) saturate(180%);
+    background: var(--light-glass-bg);
+    border: 1px solid var(--light-border-accent);
+    box-shadow: 0 8px 32px 0 var(--light-shadow);
+}
+
+body.light .text-white {
+    color: var(--light-text-primary) !important;
+}
+
+body.light .text-gray-400 {
+    color: var(--light-text-muted) !important;
+}
+
+body.light .text-gray-500 {
+    color: var(--light-text-secondary) !important;
+}
+
+body.light .text-gray-300 {
+    color: var(--light-text-secondary) !important;
+}
+
+body.light .text-gray-600 {
+    color: var(--light-text-muted) !important;
+}
+
+/* Textes cyan en mode light */
+body.light .text-cyan-100,
+body.light .text-cyan-300,
+body.light .text-cyan-400 {
+    color: #0891b2 !important; /* cyan-600 pour meilleure visibilité */
+}
+
+/* Inputs et selects en mode light */
+body.light input,
+body.light select,
+body.light textarea {
+    color: var(--light-text-primary) !important;
+    background: rgba(241, 245, 249, 0.5) !important;
+}
+
+body.light input::placeholder,
+body.light textarea::placeholder {
+    color: var(--light-text-muted) !important;
+}
+
+/* Borders en mode light */
+body.light .border-gray-300 {
+    border-color: var(--light-border) !important;
+}
+
+body.light .bg-slate-800\/50,
+body.light .bg-slate-900\/50 {
+    background: rgba(226, 232, 240, 0.5) !important;
+}
+
+body.light .bg-slate-700\/50 {
+    background: rgba(203, 213, 225, 0.5) !important;
+}
+
+body.light .border-cyan-500\/20,
+body.light .border-cyan-500\/30 {
+    border-color: var(--light-border-accent) !important;
+}
+
+body.light .bg-gray-900 {
+    background-color: var(--light-bg-primary) !important;
+}
+
+body.light .bg-gray-800 {
+    background-color: var(--light-bg-secondary) !important;
+}
+
+/* Cartes et modals en mode light */
+body.light .bg-slate-800,
+body.light .bg-slate-900 {
+    background: rgba(248, 250, 252, 0.95) !important;
+}
+
+/* Tabs et boutons en mode light */
+body.light .tab-btn {
+    color: var(--light-text-secondary) !important;
+}
+
+body.light .tab-btn.tab-active {
+    color: #0891b2 !important;
+    border-color: #0891b2 !important;
+}
+
+body.light .tab-btn:hover {
+    color: #0891b2 !important;
+}
+
+/* SVG icons en mode light */
+body.light svg {
+    color: currentColor;
+}
+
+/* Amélioration des contrastes pour les statistiques */
+body.light .text-gray-300 {
+    color: #334155 !important; /* slate-700 */
+}
+
+body.light .text-gray-600 {
+    color: #475569 !important; /* slate-600 */
+}
+
+/* Placeholder text */
+body.light ::placeholder {
+    color: var(--light-text-muted) !important;
+    opacity: 0.6;
+}
+
+/* Dark Mode (par défaut) */
+body.dark {
+    background: linear-gradient(135deg, var(--dark-bg-gradient-start) 0%, var(--dark-bg-gradient-mid) 50%, var(--dark-bg-gradient-end) 100%);
+    color: var(--dark-text-primary);
+}
+
+body.dark::before {
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(0, 255, 157, 0.08) 0%, transparent 50%);
+}
+
+/* ========================================
+   THEME TOGGLE BUTTON
+   ======================================== */
+
+.theme-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+body.dark .theme-toggle {
+    background: rgba(51, 65, 85, 0.5);
+}
+
+body.light .theme-toggle {
+    background: rgba(226, 232, 240, 0.5);
+}
+
+body.dark .theme-toggle:hover {
+    background: rgba(71, 85, 105, 0.5);
+}
+
+body.light .theme-toggle:hover {
+    background: rgba(203, 213, 225, 0.5);
+}
+
+.theme-toggle svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+body.dark .theme-toggle svg {
+    color: #fbbf24;
+}
+
+body.light .theme-toggle svg {
+    color: #6366f1;
+}
+
+/* Animation de rotation */
+.theme-toggle.rotating svg {
+    animation: rotate 0.5s ease;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Desktop - icône à côté du nom utilisateur */
+.theme-toggle-desktop {
+    order: 2;
+}
+
+/* Mobile - icône à côté du menu hamburger */
+.theme-toggle-mobile {
+    order: 1;
+}
