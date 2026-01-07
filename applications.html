@@ -99,18 +99,153 @@
         </section>
 
         <!-- Section Suivi vue -->
-        <section id="section-suivi" data-section-target="suivi" class="hidden">
-            <div class="glassmorphism rounded-2xl p-6 sm:p-8 shadow-2xl">
-                <h2 class="text-xl sm:text-2xl font-bold text-cyan-100 mb-3">Suivi vue</h2>
-                <p class="text-gray-400 text-sm sm:text-base">Cette section est en cours de développement.</p>
-                <div class="mt-6 flex flex-col sm:flex-row gap-3">
-                    <button class="tab-btn w-full sm:w-auto tab-muted">
-                        Fonctionnalité à venir
-                    </button>
-                    <button class="tab-btn w-full sm:w-auto tab-muted">
-                        Dashboards et stats
-                    </button>
+        <section id="section-suivi" data-section-target="suivi" class="hidden space-y-6 sm:space-y-8">
+            <!-- Header -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-cyan-100">Suivi des Consultations</h2>
+                    <p class="text-gray-400 text-xs sm:text-sm mt-1">Analysez le trafic de vos applications</p>
                 </div>
+            </div>
+
+            <!-- Filtres -->
+            <div class="glassmorphism rounded-xl p-4 sm:p-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    <!-- Filtre Application -->
+                    <div>
+                        <label class="block text-xs font-medium mb-2 text-cyan-300">Application</label>
+                        <select id="filter-app" class="w-full px-3 py-2 text-sm bg-slate-900/50 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 text-white">
+                            <option value="">Toutes les applications</option>
+                        </select>
+                    </div>
+
+                    <!-- Filtre Période -->
+                    <div>
+                        <label class="block text-xs font-medium mb-2 text-cyan-300">Période</label>
+                        <select id="filter-period" class="w-full px-3 py-2 text-sm bg-slate-900/50 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 text-white">
+                            <option value="today">Aujourd'hui</option>
+                            <option value="week" selected>7 derniers jours</option>
+                            <option value="month">30 derniers jours</option>
+                            <option value="all">Tout</option>
+                        </select>
+                    </div>
+
+                    <!-- Filtre Pays -->
+                    <div>
+                        <label class="block text-xs font-medium mb-2 text-cyan-300">Pays</label>
+                        <select id="filter-country" class="w-full px-3 py-2 text-sm bg-slate-900/50 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 text-white">
+                            <option value="">Tous les pays</option>
+                        </select>
+                    </div>
+
+                    <!-- Filtre Appareil -->
+                    <div>
+                        <label class="block text-xs font-medium mb-2 text-cyan-300">Appareil</label>
+                        <select id="filter-device" class="w-full px-3 py-2 text-sm bg-slate-900/50 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 text-white">
+                            <option value="">Tous les appareils</option>
+                            <option value="mobile">Mobile</option>
+                            <option value="desktop">Desktop</option>
+                            <option value="tablet">Tablet</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Total vues -->
+                <div class="glassmorphism rounded-xl p-6 hover:shadow-xl hover:shadow-cyan-500/10 transition-all duration-300">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-medium text-gray-400">Total Vues</h3>
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                    </div>
+                    <p id="kpi-total" class="text-3xl font-bold text-white">0</p>
+                    <p class="text-xs text-gray-500 mt-1">Consultations</p>
+                </div>
+
+                <!-- Vues uniques -->
+                <div class="glassmorphism rounded-xl p-6 hover:shadow-xl hover:shadow-purple-500/10 transition-all duration-300">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-medium text-gray-400">Vues Uniques</h3>
+                        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                    </div>
+                    <p id="kpi-unique" class="text-3xl font-bold text-white">0</p>
+                    <p class="text-xs text-gray-500 mt-1">Visiteurs uniques</p>
+                </div>
+
+                <!-- Vues par app -->
+                <div class="glassmorphism rounded-xl p-6 hover:shadow-xl hover:shadow-green-500/10 transition-all duration-300">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-medium text-gray-400">Applications</h3>
+                        <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <p id="kpi-apps" class="text-3xl font-bold text-white">0</p>
+                    <p class="text-xs text-gray-500 mt-1">Actives</p>
+                </div>
+
+                <!-- Taux authentifié -->
+                <div class="glassmorphism rounded-xl p-6 hover:shadow-xl hover:shadow-yellow-500/10 transition-all duration-300">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-medium text-gray-400">Authentifiés</h3>
+                        <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <p id="kpi-auth" class="text-3xl font-bold text-white">0%</p>
+                    <p class="text-xs text-gray-500 mt-1">Utilisateurs connectés</p>
+                </div>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="suivi-loading" class="flex justify-center items-center py-20">
+                <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-cyan-500"></div>
+            </div>
+
+            <!-- Table / Cards Consultations -->
+            <div id="consultations-container" class="hidden glassmorphism rounded-xl overflow-hidden">
+                <!-- En-tête -->
+                <div class="p-4 sm:p-6 border-b border-cyan-500/20">
+                    <h3 class="text-lg font-bold text-cyan-100">Dernières Consultations</h3>
+                    <p class="text-sm text-gray-400 mt-1"><span id="consultations-count">0</span> consultations</p>
+                </div>
+
+                <!-- Desktop: Table -->
+                <div class="hidden lg:block overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-slate-900/50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Date/Heure</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Application</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Localisation</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Appareil</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Navigateur</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Statut</th>
+                            </tr>
+                        </thead>
+                        <tbody id="consultations-table" class="divide-y divide-gray-700">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Mobile/Tablet: Cards -->
+                <div id="consultations-cards" class="lg:hidden divide-y divide-gray-700">
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="suivi-empty" class="hidden text-center py-20">
+                <svg class="mx-auto h-24 w-24 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                <h3 class="mt-4 text-lg font-medium text-gray-300">Aucune consultation</h3>
+                <p class="mt-2 text-gray-500">Les statistiques s'afficheront lorsque vos applications seront consultées.</p>
             </div>
         </section>
 
@@ -233,5 +368,7 @@
     <script src="assets/libs/supabase.js"></script>
     <!-- Application JS -->
     <script src="assets/js/applications.js"></script>
+    <!-- Suivi Vue JS -->
+    <script src="assets/js/suivi.js"></script>
 </body>
 </html>
