@@ -52,12 +52,35 @@ body::before {
 }
 
 .logo-pulse {
-    animation: logoPulse 2s ease-in-out infinite;
+    animation: logo3DEntrance 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-@keyframes logoPulse {
-    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5)); }
-    50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.8)); }
+@keyframes logo3DEntrance {
+    0% { 
+        opacity: 0;
+        transform: perspective(1200px) rotateX(90deg) rotateZ(-180deg) scale(0.3);
+        filter: drop-shadow(0 0 0px rgba(0, 255, 255, 0)) brightness(0.5) blur(15px);
+    }
+    30% {
+        opacity: 0.7;
+        transform: perspective(1200px) rotateX(45deg) rotateZ(-90deg) scale(0.7);
+        filter: drop-shadow(0 0 50px rgba(0, 255, 255, 1)) brightness(1.5) blur(5px);
+    }
+    60% {
+        opacity: 1;
+        transform: perspective(1200px) rotateX(-10deg) rotateZ(10deg) scale(1.15);
+        filter: drop-shadow(0 0 60px rgba(138, 43, 226, 0.9)) brightness(1.8) blur(0px);
+    }
+    80% {
+        opacity: 1;
+        transform: perspective(1200px) rotateX(5deg) rotateZ(-5deg) scale(1.05);
+        filter: drop-shadow(0 0 45px rgba(0, 255, 157, 0.8)) brightness(1.4) blur(0px);
+    }
+    100% { 
+        opacity: 1;
+        transform: perspective(1200px) rotateX(0deg) rotateZ(0deg) scale(1);
+        filter: drop-shadow(0 0 35px rgba(0, 255, 255, 0.7)) brightness(1.2) blur(0px);
+    }
 }
 
 .tech-border {
