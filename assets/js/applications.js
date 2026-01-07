@@ -185,7 +185,11 @@ function displayApplications() {
             </p>
             
             <div class="mb-4 pb-4 border-b border-cyan-500/20">
-                <a href="${escapeHtml(app.access_url)}" target="_blank" 
+                <a href="${escapeHtml(app.access_url)}" 
+                   target="_blank"
+                   data-app-id="${app.id}"
+                   data-app-url="${escapeHtml(app.access_url)}"
+                   onclick="handleAppVisit('${app.id}', '${escapeHtml(app.access_url)}')"
                    class="text-cyan-400 hover:text-cyan-300 text-sm flex items-center transition-colors">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
@@ -469,4 +473,38 @@ function openMobileMenu() {
 function closeMobileMenu() {
     mobileMenu.classList.add('hidden');
     mobileMenuBtn.classList.remove('active');
+}
+
+// ========================================
+// TRACKING DES CONSULTATIONS
+// ========================================
+
+/**
+ * Gère le tracking lors de la visite d'une application
+ * @param {string} appId - ID de l'application
+ * @param {string} appUrl - URL de l'application
+ */
+async function handleAppVisit(appId, appUrl) {
+    try {
+        // Vérifier que le module de tracking est chargé
+        if (typeof IvonyTracking === 'undefined') {
+            console.warn('⚠️ Module de tracking non disponible');
+            return;
+        }
+
+        // Enregistrer la consultation
+        const result = await IvonyTracking.trackConsultation(
+            supabaseClient,
+            appId
+        );
+
+        if (result.success) {
+            console.log('✅ Consultation enregistrée pour l\'application:', appId);
+        } else {
+            console.warn('⚠️ Échec du tracking:', result.error);
+        }
+    } catch (error) {
+        // Ne pas bloquer la navigation en cas d'erreur
+        console.error('❌ Erreur lors du tracking:', error);
+    }
 }
