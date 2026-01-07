@@ -53,7 +53,7 @@ function initTabs() {
     if (!tabs.length || !sections.length) return;
 
     tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
+        tab.addEventListener('click', async () => {
             const target = tab.getAttribute('data-section');
 
             tabs.forEach((btn) => {
@@ -66,6 +66,11 @@ function initTabs() {
                 const isTarget = section.getAttribute('data-section-target') === target;
                 section.classList.toggle('hidden', !isTarget);
             });
+
+            // Charger les données du suivi si l'onglet est activé
+            if (target === 'suivi' && typeof window.initSuivi === 'function') {
+                await window.initSuivi();
+            }
         });
     });
 
