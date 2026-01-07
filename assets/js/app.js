@@ -15,9 +15,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const loginError = document.getElementById('login-error');
+    const loginSubmit = document.getElementById('login-submit');
     const welcomeMessage = document.getElementById('welcome-message');
     const userIdElement = document.getElementById('user-id');
     const logoutBtn = document.getElementById('logout-btn');
+
+    function setLoginLoading(isLoading) {
+        if (!loginSubmit) return;
+        loginSubmit.disabled = isLoading;
+        const spinner = loginSubmit.querySelector('.button-spinner');
+        const label = loginSubmit.querySelector('.button-label');
+        if (spinner) spinner.classList.toggle('hidden', !isLoading);
+        if (label) label.textContent = isLoading ? 'Connexion...' : 'Se connecter';
+    }
 
     // Animation de chargement (1 seconde)
     setTimeout(() => {
@@ -34,16 +44,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         loginError.classList.add('hidden');
         emailInput.value = '';
         passwordInput.value = '';
-    }
-
-    // Fonction pour afficher la page de bienvenue
-    function showWelcome(user, profile) {
-        console.log('Affichage de la page de bienvenue pour', user.email);
-        loginPage.classList.add('hidden');
-        welcomePage.classList.remove('hidden');
-        const displayName = profile?.username || user.email;
-        welcomeMessage.textContent = `Bienvenue, ${displayName}`;
-        userIdElement.textContent = `ID utilisateur : ${user.id}`;
     }
 
     // Fonction pour récupérer le profil utilisateur depuis la table 'ivony_profiles'
@@ -88,6 +88,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const email = emailInput.value.trim();
         const password = passwordInput.value;
         console.log('Email:', email);
+        loginError.classList.add('hidden');
+        setLoginLoading(true);
 
         try {
             console.log('Appel à signInWithPassword...');
@@ -102,13 +104,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log('Connexion réussie, données:', data);
 
             // Rediriger vers la page de gestion des applications
-            window.location.href = 'applications.html';
+            window.location.replace('applications.html');
         } catch (error) {
             console.error('Erreur de connexion :', error);
             loginError.textContent = error.message === 'Invalid login credentials'
                 ? 'Email ou mot de passe incorrect.'
                 : 'Erreur lors de la connexion. Veuillez réessayer.';
             loginError.classList.remove('hidden');
+        } finally {
+            setLoginLoading(false);
         }
     });
 
@@ -126,11 +130,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Écouter les changements d'état d'authentification
     supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (event === 'SIGNED_IN' && session) {
-            const profile = await Promise.race([
-                getUserProfile(session.user.id),
-                new Promise(resolve => setTimeout(() => resolve(null), 3000))
-            ]);
-            showWelcome(session.user, profile);
+            // Ancienne modale/écran de déconnexion supprimé : on redirige directement
+            window.location.replace('applications.html');
         } else if (event === 'SIGNED_OUT') {
             showLogin();
         }
