@@ -61,4 +61,118 @@
     .glassmorphism {
         backdrop-filter: blur(12px);
     }
+    
+    /* Ajustements pour les petits écrans */
+    body {
+        font-size: 14px;
+    }
+    
+    /* Améliorer les zones de toucher sur mobile */
+    button {
+        min-height: 44px;
+    }
+    
+    input, textarea {
+        font-size: 16px; /* Évite le zoom sur iOS */
+    }
 }
+
+/* Tablette */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .glassmorphism {
+        backdrop-filter: blur(14px);
+    }
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+    .glassmorphism {
+        backdrop-filter: blur(16px);
+    }
+}
+
+/* Animation optimisée pour mobile */
+@media (prefers-reduced-motion: reduce) {
+    .animate-slide-in,
+    .animate-modal {
+        animation: none;
+    }
+}
+
+/* Mode paysage mobile */
+@media (max-width: 640px) and (orientation: landscape) {
+    nav {
+        height: 3.5rem;
+    }
+    
+    #app-modal .glassmorphism,
+    #delete-modal .glassmorphism {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+/* Amélioration de la lisibilité sur petits écrans */
+@media (max-width: 480px) {
+    .line-clamp-2 {
+        -webkit-line-clamp: 3;
+    }
+}
+
+/* Onglets principaux */
+.tab-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(34, 211, 238, 0.3);
+    background: rgba(15, 23, 42, 0.6);
+    color: #e2e8f0;
+    font-weight: 600;
+    transition: transform 0.2s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.tab-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(34, 211, 238, 0.25);
+}
+
+.tab-active {
+    background: linear-gradient(90deg, rgba(34, 211, 238, 0.15), rgba(168, 85, 247, 0.15));
+    border-color: rgba(168, 85, 247, 0.4);
+    color: #67e8f9;
+    box-shadow: 0 10px 35px rgba(168, 85, 247, 0.25);
+}
+
+.tab-muted {
+    opacity: 0.7;
+}
+
+.tab-strip {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+}
+
+.tab-strip::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-strip .tab-btn {
+    scroll-snap-align: start;
+}
+
+@media (max-width: 640px) {
+    .tab-btn {
+        padding: 0.6rem 0.95rem;
+        border-radius: 0.65rem;
+        font-size: 0.95rem;
+    }
+}
+
