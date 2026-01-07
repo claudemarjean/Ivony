@@ -254,8 +254,19 @@
             <div id="consultations-container" class="hidden glassmorphism rounded-xl overflow-hidden">
                 <!-- En-tête -->
                 <div class="p-4 sm:p-6 border-b border-cyan-500/20">
-                    <h3 class="text-lg font-bold text-cyan-100">Dernières Consultations</h3>
-                    <p class="text-sm text-gray-400 mt-1"><span id="consultations-count">0</span> consultations</p>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-bold text-cyan-100">Dernières Consultations</h3>
+                            <p class="text-sm text-gray-400 mt-1"><span id="consultations-count">0</span> consultations</p>
+                        </div>
+                        <!-- Bouton supprimer (caché par défaut) -->
+                        <button id="delete-selected-btn" class="hidden px-4 py-2 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 rounded-lg text-sm font-semibold transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                            <span>Supprimer <span id="delete-count">0</span></span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Desktop: Table -->
@@ -263,6 +274,9 @@
                     <table class="w-full">
                         <thead class="bg-slate-900/50">
                             <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">
+                                    <input type="checkbox" id="select-all-checkbox" class="w-4 h-4 rounded border-cyan-500/30 bg-slate-900/50 text-cyan-500 focus:ring-2 focus:ring-cyan-400 cursor-pointer">
+                                </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Date/Heure</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Application</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Adresse IP</th>
@@ -446,6 +460,45 @@
                             </svg>
                             Whitelist
                         </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation de suppression -->
+    <div id="delete-confirm-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="glassmorphism rounded-2xl p-6 sm:p-8 w-full max-w-md shadow-2xl transform transition-all">
+            <div class="text-center">
+                <!-- Icône d'avertissement -->
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-500/20 border-2 border-red-500/50 mb-4">
+                    <svg class="h-10 w-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                
+                <!-- Titre -->
+                <h3 class="text-xl font-bold text-cyan-100 mb-2">Confirmer la suppression</h3>
+                
+                <!-- Message -->
+                <p class="text-gray-300 mb-6">
+                    Êtes-vous sûr de vouloir supprimer <span id="delete-confirm-count" class="font-bold text-cyan-400">0</span> consultation(s) ?
+                    <br>
+                    <span class="text-sm text-gray-400 mt-2 block">Cette action peut être annulée.</span>
+                </p>
+                
+                <!-- Boutons -->
+                <div class="flex gap-3">
+                    <button id="delete-cancel-btn" 
+                            class="flex-1 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-400">
+                        Annuler
+                    </button>
+                    <button id="delete-confirm-btn" 
+                            class="flex-1 py-3 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400 shadow-lg shadow-red-500/30 flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                        Supprimer
                     </button>
                 </div>
             </div>

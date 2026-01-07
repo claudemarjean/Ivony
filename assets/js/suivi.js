@@ -16,6 +16,14 @@ const consultationsTable = document.getElementById('consultations-table');
 const consultationsCards = document.getElementById('consultations-cards');
 const consultationsCount = document.getElementById('consultations-count');
 
+// Bouton de suppression
+const deleteSelectedBtn = document.getElementById('delete-selected-btn');
+const deleteCount = document.getElementById('delete-count');
+const selectAllCheckbox = document.getElementById('select-all-checkbox');
+
+// État des sélections
+let selectedConsultations = new Set();
+
 // Filtres
 const filterApp = document.getElementById('filter-app');
 const filterPeriod = document.getElementById('filter-period');
@@ -37,6 +45,12 @@ const ipReason = document.getElementById('ip-reason');
 const ipBlacklistBtn = document.getElementById('ip-blacklist-btn');
 const ipWhitelistBtn = document.getElementById('ip-whitelist-btn');
 const closeIpModalBtn = document.getElementById('close-ip-modal-btn');
+
+// Modal de confirmation de suppression
+const deleteConfirmModal = document.getElementById('delete-confirm-modal');
+const deleteConfirmCount = document.getElementById('delete-confirm-count');
+const deleteConfirmBtn = document.getElementById('delete-confirm-btn');
+const deleteCancelBtn = document.getElementById('delete-cancel-btn');
 
 let currentIpAction = null; // {ip: string, action: 'blacklist'|'whitelist'}
 
@@ -143,8 +157,8 @@ async function loadConsultations() {
             throw error;
         }
 
-        // Charger toutes les consultations (le filtre gérera l'affichage)
-        consultations = data || [];
+        // Filtrer côté client les consultations supprimées
+        consultations = (data || []).filter(c => !c.is_deleted);
         
         console.log('✅ Consultations chargées:', consultations.length);
         console.log('📊 Exemple de consultation:', consultations[0]);
@@ -320,6 +334,9 @@ function displayTable() {
         row.className = 'hover:bg-slate-800/50 transition-colors';
 
         row.innerHTML = `
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <input type="checkbox" class="consultation-checkbox w-4 h-4 rounded border-cyan-500/30 bg-slate-900/50 text-cyan-500 focus:ring-2 focus:ring-cyan-400 cursor-pointer" data-id="${consultation.id}">
+            </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                 ${formatDateTime(consultation.visited_at)}
             </td>
@@ -351,6 +368,18 @@ function displayTable() {
 
     // Ajouter les event listeners pour les boutons d'action
     setupActionButtons();
+    
+    // Ajouter les event listeners pour les checkboxes
+    document.querySelectorAll('.consultation-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', handleCheckboxChange);
+        // Restaurer l'état de sélection si elle existe
+        if (selectedConsultations.has(checkbox.dataset.id)) {
+            checkbox.checked = true;
+        }
+    });
+    
+    // Mettre à jour le bouton de suppression
+    updateDeleteButton();
 }
 
 /**
@@ -367,10 +396,12 @@ function displayCards() {
             <div class="space-y-3">
                 <!-- En-tête -->
                 <div class="flex justify-between items-start">
-                    <div>
-                        <h4 class="font-semibold text-cyan-300 text-sm">
-                            ${escapeHtml(applicationsMap.get(consultation.application_id) || 'N/A')}
-                        </h4>
+                    <div class="flex items-start gap-3">
+                        <input type="checkbox" class="consultation-checkbox w-4 h-4 mt-1 rounded border-cyan-500/30 bg-slate-900/50 text-cyan-500 focus:ring-2 focus:ring-cyan-400 cursor-pointer" data-id="${consultation.id}">
+                        <div>
+                            <h4 class="font-semibold text-cyan-300 text-sm">
+                                ${escapeHtml(applicationsMap.get(consultation.application_id) || 'N/A')}
+                            </h4>
                         <p class="text-xs text-gray-500 mt-1">
                             ${formatDateTime(consultation.visited_at)}
                         </p>
@@ -414,6 +445,18 @@ function displayCards() {
 
     // Ajouter les event listeners pour les boutons d'action
     setupActionButtons();
+    
+    // Ajouter les event listeners pour les checkboxes
+    document.querySelectorAll('.consultation-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', handleCheckboxChange);
+        // Restaurer l'état de sélection si elle existe
+        if (selectedConsultations.has(checkbox.dataset.id)) {
+            checkbox.checked = true;
+        }
+    });
+    
+    // Mettre à jour le bouton de suppression
+    updateDeleteButton();
 }
 
 // ========================================
@@ -622,6 +665,146 @@ async function manageIpAccess(action) {
 }
 
 // ========================================
+// GESTION DES SÉLECTIONS ET SUPPRESSION
+// ========================================
+
+/**
+ * Mettre à jour l'affichage du bouton de suppression
+ */
+function updateDeleteButton() {
+    const count = selectedConsultations.size;
+    
+    if (count > 0) {
+        deleteSelectedBtn.classList.remove('hidden');
+        deleteCount.textContent = count;
+    } else {
+        deleteSelectedBtn.classList.add('hidden');
+    }
+    
+    // Mettre à jour l'état de la checkbox "Tout sélectionner"
+    if (selectAllCheckbox) {
+        const visibleIds = filteredConsultations.slice(0, 50).map(c => c.id);
+        const allSelected = visibleIds.length > 0 && visibleIds.every(id => selectedConsultations.has(id));
+        selectAllCheckbox.checked = allSelected;
+        selectAllCheckbox.indeterminate = !allSelected && visibleIds.some(id => selectedConsultations.has(id));
+    }
+}
+
+/**
+ * Gérer le clic sur une checkbox de consultation
+ */
+function handleCheckboxChange(event) {
+    const checkbox = event.target;
+    const consultationId = checkbox.dataset.id;
+    
+    if (checkbox.checked) {
+        selectedConsultations.add(consultationId);
+    } else {
+        selectedConsultations.delete(consultationId);
+    }
+    
+    updateDeleteButton();
+}
+
+/**
+ * Gérer le clic sur "Tout sélectionner"
+ */
+function handleSelectAll(event) {
+    const isChecked = event.target.checked;
+    const visibleIds = filteredConsultations.slice(0, 50).map(c => c.id);
+    
+    if (isChecked) {
+        // Sélectionner toutes les consultations visibles
+        visibleIds.forEach(id => selectedConsultations.add(id));
+    } else {
+        // Désélectionner toutes les consultations visibles
+        visibleIds.forEach(id => selectedConsultations.delete(id));
+    }
+    
+    // Mettre à jour toutes les checkboxes
+    document.querySelectorAll('.consultation-checkbox').forEach(cb => {
+        if (visibleIds.includes(cb.dataset.id)) {
+            cb.checked = isChecked;
+        }
+    });
+    
+    updateDeleteButton();
+}
+
+/**
+ * Supprimer les consultations sélectionnées (suppression logique)
+ */
+async function handleDeleteSelected() {
+    if (selectedConsultations.size === 0) return;
+    
+    // Ouvrir le modal de confirmation
+    openDeleteConfirmModal();
+}
+
+/**
+ * Ouvrir le modal de confirmation de suppression
+ */
+function openDeleteConfirmModal() {
+    if (!deleteConfirmModal) return;
+    
+    deleteConfirmCount.textContent = selectedConsultations.size;
+    deleteConfirmModal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+/**
+ * Fermer le modal de confirmation de suppression
+ */
+function closeDeleteConfirmModal() {
+    if (!deleteConfirmModal) return;
+    
+    deleteConfirmModal.classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+/**
+ * Confirmer et exécuter la suppression
+ */
+async function confirmDelete() {
+    if (selectedConsultations.size === 0) return;
+    
+    // Fermer le modal
+    closeDeleteConfirmModal();
+    
+    try {
+        console.log('🗑️ Suppression de', selectedConsultations.size, 'consultations...');
+        
+        // Convertir le Set en array d'IDs
+        const idsToDelete = Array.from(selectedConsultations);
+        
+        // Effectuer la suppression logique (is_deleted = true)
+        const { error } = await supabaseClient
+            .from('ivony_consultation')
+            .update({ is_deleted: true })
+            .in('id', idsToDelete);
+        
+        if (error) {
+            console.error('❌ Erreur lors de la suppression:', error);
+            throw error;
+        }
+        
+        console.log('✅ Suppressions effectuées avec succès');
+        showToast(`${idsToDelete.length} consultation(s) supprimée(s)`, 'success');
+        
+        // Réinitialiser les sélections
+        selectedConsultations.clear();
+        updateDeleteButton();
+        
+        // Recharger les consultations
+        await loadConsultations();
+        
+    } catch (error) {
+        console.error('❌ Erreur lors de la suppression:', error);
+        showToast('Erreur lors de la suppression', 'error');
+    }
+}
+
+// ========================================
 // ÉVÉNEMENTS
 // ========================================
 
@@ -636,6 +819,34 @@ function setupSuiviEventListeners() {
     filterCountry.addEventListener('change', applyFilters);
     filterDevice.addEventListener('change', applyFilters);
     filterIpStatus.addEventListener('change', applyFilters);
+    
+    // Event listeners pour les checkboxes
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', handleSelectAll);
+    }
+    
+    // Event listener pour le bouton de suppression
+    if (deleteSelectedBtn) {
+        deleteSelectedBtn.addEventListener('click', handleDeleteSelected);
+    }
+    
+    // Event listeners pour le modal de confirmation
+    if (deleteConfirmBtn) {
+        deleteConfirmBtn.addEventListener('click', confirmDelete);
+    }
+    
+    if (deleteCancelBtn) {
+        deleteCancelBtn.addEventListener('click', closeDeleteConfirmModal);
+    }
+    
+    // Fermer le modal en cliquant en dehors
+    if (deleteConfirmModal) {
+        deleteConfirmModal.addEventListener('click', (e) => {
+            if (e.target === deleteConfirmModal) {
+                closeDeleteConfirmModal();
+            }
+        });
+    }
     
     // Event listeners pour la modale IP
     if (closeIpModalBtn) {
