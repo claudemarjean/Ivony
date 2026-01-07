@@ -223,10 +223,12 @@
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Date/Heure</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Application</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Adresse IP</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Localisation</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Appareil</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Navigateur</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Statut</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-cyan-300 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="consultations-table" class="divide-y divide-gray-700">
@@ -350,6 +352,59 @@
                     <button id="cancel-delete-btn"
                             class="flex-1 py-2.5 sm:py-3 text-sm sm:text-base bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-all duration-300">
                         Annuler
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Gestion IP -->
+    <div id="ip-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="glassmorphism rounded-2xl p-6 md:p-8 w-full max-w-md shadow-2xl animate-modal">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="ip-modal-title" class="text-xl font-bold text-cyan-300">
+                    Gérer l'adresse IP
+                </h3>
+                <button id="close-ip-modal-btn" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-slate-900/50 rounded-lg p-4 border border-cyan-500/20">
+                    <p class="text-xs text-gray-400 mb-1">Adresse IP</p>
+                    <p id="ip-modal-address" class="text-lg font-mono text-cyan-300"></p>
+                </div>
+
+                <div>
+                    <label for="ip-reason" class="block text-sm font-medium mb-2 text-cyan-300">
+                        Raison (optionnel)
+                    </label>
+                    <textarea id="ip-reason" rows="3"
+                              class="w-full px-4 py-3 bg-slate-900/50 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-300 placeholder-gray-500 text-white resize-none"
+                              placeholder="Pourquoi gérer cette IP ?"></textarea>
+                </div>
+
+                <div class="flex gap-3">
+                    <button id="ip-blacklist-btn" 
+                            class="flex-1 py-3 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400 shadow-lg shadow-red-500/30">
+                        <span class="flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
+                            </svg>
+                            Blacklist
+                        </span>
+                    </button>
+                    <button id="ip-whitelist-btn"
+                            class="flex-1 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 shadow-lg shadow-green-500/30">
+                        <span class="flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Whitelist
+                        </span>
                     </button>
                 </div>
             </div>
