@@ -15,9 +15,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const loginError = document.getElementById('login-error');
+    const loginSubmit = document.getElementById('login-submit');
     const welcomeMessage = document.getElementById('welcome-message');
     const userIdElement = document.getElementById('user-id');
     const logoutBtn = document.getElementById('logout-btn');
+
+    function setLoginLoading(isLoading) {
+        if (!loginSubmit) return;
+        loginSubmit.disabled = isLoading;
+        const spinner = loginSubmit.querySelector('.button-spinner');
+        const label = loginSubmit.querySelector('.button-label');
+        if (spinner) spinner.classList.toggle('hidden', !isLoading);
+        if (label) label.textContent = isLoading ? 'Connexion...' : 'Se connecter';
+    }
 
     // Animation de chargement (1 seconde)
     setTimeout(() => {
@@ -88,6 +98,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const email = emailInput.value.trim();
         const password = passwordInput.value;
         console.log('Email:', email);
+        loginError.classList.add('hidden');
+        setLoginLoading(true);
 
         try {
             console.log('Appel à signInWithPassword...');
@@ -109,6 +121,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 ? 'Email ou mot de passe incorrect.'
                 : 'Erreur lors de la connexion. Veuillez réessayer.';
             loginError.classList.remove('hidden');
+        } finally {
+            setLoginLoading(false);
         }
     });
 
