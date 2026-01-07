@@ -21,6 +21,7 @@ const filterApp = document.getElementById('filter-app');
 const filterPeriod = document.getElementById('filter-period');
 const filterCountry = document.getElementById('filter-country');
 const filterDevice = document.getElementById('filter-device');
+const filterIpStatus = document.getElementById('filter-ip-status');
 
 // KPIs
 const kpiTotal = document.getElementById('kpi-total');
@@ -142,14 +143,10 @@ async function loadConsultations() {
             throw error;
         }
 
-        // Filtrer les consultations blacklistées
-        const allConsultations = data || [];
-        consultations = allConsultations.filter(c => {
-            const ipStatus = ipAccessControl.get(c.ip_address);
-            return !ipStatus || ipStatus.status !== 'blacklist';
-        });
+        // Charger toutes les consultations (le filtre gérera l'affichage)
+        consultations = data || [];
         
-        console.log('✅ Consultations chargées:', consultations.length, '(', allConsultations.length - consultations.length, 'blacklistées filtrées)');
+        console.log('✅ Consultations chargées:', consultations.length);
         console.log('📊 Exemple de consultation:', consultations[0]);
 
         // Peupler les autres filtres
@@ -207,6 +204,7 @@ function applyFilters() {
     const periodFilter = filterPeriod.value;
     const countryFilter = filterCountry.value;
     const deviceFilter = filterDevice.value;
+    const ipStatusFilter = filterIpStatus.value;
 
     // Calculer la date de début selon la période
     const now = new Date();
@@ -240,6 +238,20 @@ function applyFilters() {
 
         // Filtre device
         if (deviceFilter && c.device_type?.toLowerCase() !== deviceFilter) return false;
+
+        // Filtre statut IP
+        if (ipStatusFilter) {
+            const ipStatus = ipAccessControl.get(c.ip_address);
+            const currentStatus = ipStatus?.status || 'none';
+            
+            if (ipStatusFilter === 'mot-a-trouver') {
+                // Mot à trouver = neutre + whitelist
+                if (currentStatus !== 'none' && currentStatus !== 'whitelist') return false;
+            } else if (ipStatusFilter === 'blacklist') {
+                // Blacklist seulement
+                if (currentStatus !== 'blacklist') return false;
+            }
+        }
 
         return true;
     });
@@ -475,7 +487,7 @@ function formatIpBadge(ipAddress) {
     }
     
     if (ipStatus.status === 'blacklist') {
-        return '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-500/20 text-red-300 border border-red-500/30">Blacklist</span>';
+        return '<span class="ip-status-badge inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-500/20 text-red-300 border border-red-500/30 cursor-pointer hover:bg-red-500/30 transition-colors" data-ip="' + escapeHtml(ipAddress) + '" data-status="blacklist">Blacklist</span>';
     }
     
     if (ipStatus.status === 'whitelist') {
@@ -530,14 +542,20 @@ function closeIpModal() {
  * Configurer les boutons d'action IP
  */
 function setupActionButtons() {
-    // Clics sur les badges de statut IP pour ouvrir la modale de blacklist
+    // Clics sur les badges de statut IP pour ouvrir la modale
     document.querySelectorAll('.ip-status-badge').forEach(badge => {
         badge.addEventListener('click', (e) => {
             const ip = e.currentTarget.dataset.ip;
             const status = e.currentTarget.dataset.status;
             
-            if (ip && (status === 'none' || status === 'whitelist')) {
-                openIpModal(ip, 'blacklist');
+            if (ip) {
+                if (status === 'blacklist') {
+                    // Pour les blacklist, ouvrir la modale de whitelist
+                    openIpModal(ip, 'whitelist');
+                } else if (status === 'none' || status === 'whitelist') {
+                    // Pour neutre et whitelist, ouvrir la modale de blacklist
+                    openIpModal(ip, 'blacklist');
+                }
             }
         });
     });
@@ -611,12 +629,13 @@ async function manageIpAccess(action) {
  * Configurer les écouteurs d'événements pour les filtres
  */
 function setupSuiviEventListeners() {
-    if (!filterApp || !filterPeriod || !filterCountry || !filterDevice) return;
+    if (!filterApp || !filterPeriod || !filterCountry || !filterDevice || !filterIpStatus) return;
 
     filterApp.addEventListener('change', applyFilters);
     filterPeriod.addEventListener('change', applyFilters);
     filterCountry.addEventListener('change', applyFilters);
     filterDevice.addEventListener('change', applyFilters);
+    filterIpStatus.addEventListener('change', applyFilters);
     
     // Event listeners pour la modale IP
     if (closeIpModalBtn) {
