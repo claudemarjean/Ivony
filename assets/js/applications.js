@@ -37,12 +37,43 @@ const appActiveInput = document.getElementById('app-active');
 
 // Initialisation au chargement
 document.addEventListener('DOMContentLoaded', async () => {
+    initTabs();
+
     const authSuccess = await checkAuth();
     if (authSuccess && currentUser) {
         await loadApplications();
         setupEventListeners();
     }
 });
+
+function initTabs() {
+    const tabs = document.querySelectorAll('.tab-btn[data-section]');
+    const sections = document.querySelectorAll('[data-section-target]');
+
+    if (!tabs.length || !sections.length) return;
+
+    tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+            const target = tab.getAttribute('data-section');
+
+            tabs.forEach((btn) => {
+                const isActive = btn === tab;
+                btn.classList.toggle('tab-active', isActive);
+                btn.classList.toggle('tab-muted', !isActive);
+            });
+
+            sections.forEach((section) => {
+                const isTarget = section.getAttribute('data-section-target') === target;
+                section.classList.toggle('hidden', !isTarget);
+            });
+        });
+    });
+
+    const defaultTab = document.querySelector('.tab-btn.tab-active[data-section]') || tabs[0];
+    if (defaultTab) {
+        defaultTab.click();
+    }
+}
 
 // Vérifier l'authentification
 async function checkAuth() {

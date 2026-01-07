@@ -19,12 +19,6 @@
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center space-x-2 sm:space-x-4">
                     <img src="assets/img/Logo Ivony.png" alt="Logo Ivony" class="h-8 sm:h-10 w-auto">
-                    <h1 class="text-sm sm:text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent hidden sm:block">
-                        Gestion des Applications
-                    </h1>
-                    <h1 class="text-sm font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent sm:hidden">
-                        Apps
-                    </h1>
                 </div>
                 <div class="flex items-center space-x-2 sm:space-x-4">
                     <span id="user-name" class="text-xs sm:text-sm text-cyan-300 hidden md:inline"></span>
@@ -40,45 +34,99 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        <!-- Header Actions -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-3 sm:gap-4">
-            <div>
-                <h2 class="text-xl sm:text-2xl font-bold text-cyan-100">Mes Applications</h2>
-                <p class="text-gray-400 text-xs sm:text-sm mt-1">Gérez vos applications en toute simplicité</p>
-            </div>
-            <button id="add-app-btn" class="tech-border w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 rounded-lg text-sm sm:text-base font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/50">
-                <span class="flex items-center justify-center">
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+            <!-- Menu principal -->
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8">
+                <button data-section="apps" class="tab-btn tab-active w-full sm:w-auto">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"></path>
                     </svg>
-                    <span class="hidden sm:inline">Nouvelle Application</span>
-                    <span class="sm:hidden">Ajouter</span>
-                </span>
-            </button>
-        </div>
+                    Gestion des applications
+                </button>
+                <button data-section="suivi" class="tab-btn tab-muted w-full sm:w-auto">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3v18m4-14l-4-4-4 4m8 10l-4 4-4-4"></path>
+                    </svg>
+                    Suivi vue
+                </button>
+                <button data-section="users" class="tab-btn tab-muted w-full sm:w-auto">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2a3 3 0 00-.176-1H7.176A3 3 0 007 18v2m0 0H2v-2a3 3 0 015.356-1.857M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    Utilisateurs
+                </button>
+            </div>
+        <!-- Section Applications -->
+        <section id="section-apps" data-section-target="apps" class="space-y-6 sm:space-y-8">
+            <!-- Header Actions -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+                <div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-cyan-100">Mes Applications</h2>
+                    <p class="text-gray-400 text-xs sm:text-sm mt-1">Gérez vos applications en toute simplicité</p>
+                </div>
+                <button id="add-app-btn" class="tech-border w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 rounded-lg text-sm sm:text-base font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/50">
+                    <span class="flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        <span class="hidden sm:inline">Nouvelle Application</span>
+                        <span class="sm:hidden">Ajouter</span>
+                    </span>
+                </button>
+            </div>
 
-        <!-- Loading Spinner -->
-        <div id="loading-spinner" class="flex justify-center items-center py-20">
-            <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-cyan-500"></div>
-        </div>
+            <!-- Loading Spinner -->
+            <div id="loading-spinner" class="flex justify-center items-center py-20">
+                <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-cyan-500"></div>
+            </div>
 
-        <!-- Applications Grid -->
-        <div id="applications-container" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-            <!-- Les cartes d'applications seront ajoutées ici dynamiquement -->
-        </div>
+            <!-- Applications Grid -->
+            <div id="applications-container" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Les cartes d'applications seront ajoutées ici dynamiquement -->
+            </div>
 
-        <!-- Empty State -->
-        <div id="empty-state" class="hidden text-center py-20">
-            <svg class="mx-auto h-24 w-24 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-            </svg>
-            <h3 class="mt-4 text-lg font-medium text-gray-300">Aucune application</h3>
-            <p class="mt-2 text-gray-500">Commencez par créer votre première application.</p>
-            <button id="empty-add-btn" class="mt-6 px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg font-semibold hover:from-cyan-400 hover:to-purple-500 transition-all duration-300">
-                Créer une application
-            </button>
-        </div>
+            <!-- Empty State -->
+            <div id="empty-state" class="hidden text-center py-20">
+                <svg class="mx-auto h-24 w-24 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                </svg>
+                <h3 class="mt-4 text-lg font-medium text-gray-300">Aucune application</h3>
+                <p class="mt-2 text-gray-500">Commencez par créer votre première application.</p>
+                <button id="empty-add-btn" class="mt-6 px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg font-semibold hover:from-cyan-400 hover:to-purple-500 transition-all duration-300">
+                    Créer une application
+                </button>
+            </div>
+        </section>
+
+        <!-- Section Suivi vue -->
+        <section id="section-suivi" data-section-target="suivi" class="hidden">
+            <div class="glassmorphism rounded-2xl p-6 sm:p-8 shadow-2xl">
+                <h2 class="text-xl sm:text-2xl font-bold text-cyan-100 mb-3">Suivi vue</h2>
+                <p class="text-gray-400 text-sm sm:text-base">Cette section est en cours de développement.</p>
+                <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                    <button class="tab-btn w-full sm:w-auto tab-muted">
+                        Fonctionnalité à venir
+                    </button>
+                    <button class="tab-btn w-full sm:w-auto tab-muted">
+                        Dashboards et stats
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Utilisateurs -->
+        <section id="section-users" data-section-target="users" class="hidden">
+            <div class="glassmorphism rounded-2xl p-6 sm:p-8 shadow-2xl">
+                <h2 class="text-xl sm:text-2xl font-bold text-cyan-100 mb-3">Utilisateurs</h2>
+                <p class="text-gray-400 text-sm sm:text-base">Gestion des utilisateurs en cours de développement.</p>
+                <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                    <button class="tab-btn w-full sm:w-auto tab-muted">
+                        Liste / rôles</button>
+                    <button class="tab-btn w-full sm:w-auto tab-muted">
+                        Invitations / accès</button>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Modal Ajouter/Modifier Application -->
