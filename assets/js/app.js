@@ -19,13 +19,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const userIdElement = document.getElementById('user-id');
     const logoutBtn = document.getElementById('logout-btn');
 
-    // Animation de chargement (1,5 secondes)
+    // Animation de chargement (1 seconde)
     setTimeout(() => {
         splashScreen.classList.add('fade-out');
         setTimeout(() => {
             splashScreen.classList.add('hidden');
-        }, 500);
-    }, 1500);
+        }, 300);
+    }, 1000);
 
     // Fonction pour afficher la page login
     function showLogin() {
