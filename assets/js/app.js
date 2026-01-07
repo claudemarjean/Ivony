@@ -69,12 +69,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const { data: { session }, error } = await supabaseClient.auth.getSession();
             if (error) throw error;
             if (session) {
-                console.log('Session trouvée, récupération du profil...');
-                const profile = await Promise.race([
-                    getUserProfile(session.user.id),
-                    new Promise(resolve => setTimeout(() => resolve(null), 3000))
-                ]);
-                showWelcome(session.user, profile);
+                console.log('Session trouvée, redirection vers applications...');
+                window.location.href = 'applications.html';
             } else {
                 console.log('Aucune session, affichage login');
                 showLogin();
@@ -105,21 +101,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             console.log('Connexion réussie, données:', data);
 
-            // Afficher la page de bienvenue immédiatement
-            showWelcome(data.user, null);
-
-            // Récupérer le profil en arrière-plan avec timeout
-            const profile = await Promise.race([
-                getUserProfile(data.user.id),
-                new Promise(resolve => setTimeout(() => resolve(null), 3000))
-            ]);
-            console.log('Profil récupéré:', profile);
-
-            // Mettre à jour l'affichage si le profil est disponible
-            if (profile) {
-                const displayName = profile.username || data.user.email;
-                welcomeMessage.textContent = `Bienvenue, ${displayName}`;
-            }
+            // Rediriger vers la page de gestion des applications
+            window.location.href = 'applications.html';
         } catch (error) {
             console.error('Erreur de connexion :', error);
             loginError.textContent = error.message === 'Invalid login credentials'
