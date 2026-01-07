@@ -61,4 +61,61 @@
     .glassmorphism {
         backdrop-filter: blur(12px);
     }
+    
+    /* Ajustements pour les petits écrans */
+    body {
+        font-size: 14px;
+    }
+    
+    /* Améliorer les zones de toucher sur mobile */
+    button {
+        min-height: 44px;
+    }
+    
+    input, textarea {
+        font-size: 16px; /* Évite le zoom sur iOS */
+    }
 }
+
+/* Tablette */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .glassmorphism {
+        backdrop-filter: blur(14px);
+    }
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+    .glassmorphism {
+        backdrop-filter: blur(16px);
+    }
+}
+
+/* Animation optimisée pour mobile */
+@media (prefers-reduced-motion: reduce) {
+    .animate-slide-in,
+    .animate-modal {
+        animation: none;
+    }
+}
+
+/* Mode paysage mobile */
+@media (max-width: 640px) and (orientation: landscape) {
+    nav {
+        height: 3.5rem;
+    }
+    
+    #app-modal .glassmorphism,
+    #delete-modal .glassmorphism {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+/* Amélioration de la lisibilité sur petits écrans */
+@media (max-width: 480px) {
+    .line-clamp-2 {
+        -webkit-line-clamp: 3;
+    }
+}
+

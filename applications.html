@@ -14,19 +14,25 @@
 </head>
 <body class="dark bg-gray-900 text-white">
     <!-- Navigation -->
-    <nav class="glassmorphism border-b border-cyan-500/20">
+    <nav class="glassmorphism border-b border-cyan-500/20 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <div class="flex items-center space-x-4">
-                    <img src="assets/img/Logo Ivony.png" alt="Logo Ivony" class="h-10 w-auto">
-                    <h1 class="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <img src="assets/img/Logo Ivony.png" alt="Logo Ivony" class="h-8 sm:h-10 w-auto">
+                    <h1 class="text-sm sm:text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent hidden sm:block">
                         Gestion des Applications
                     </h1>
+                    <h1 class="text-sm font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent sm:hidden">
+                        Apps
+                    </h1>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <span id="user-name" class="text-sm text-cyan-300"></span>
-                    <button id="logout-btn" class="px-4 py-2 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 rounded-lg text-sm font-semibold transition-all duration-300 transform hover:scale-105">
-                        Déconnexion
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <span id="user-name" class="text-xs sm:text-sm text-cyan-300 hidden md:inline"></span>
+                    <button id="logout-btn" class="px-3 py-2 sm:px-4 sm:py-2 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-300 transform hover:scale-105">
+                        <span class="hidden sm:inline">Déconnexion</span>
+                        <svg class="w-5 h-5 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -34,19 +40,20 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         <!-- Header Actions -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-3 sm:gap-4">
             <div>
-                <h2 class="text-2xl font-bold text-cyan-100">Mes Applications</h2>
-                <p class="text-gray-400 text-sm mt-1">Gérez vos applications en toute simplicité</p>
+                <h2 class="text-xl sm:text-2xl font-bold text-cyan-100">Mes Applications</h2>
+                <p class="text-gray-400 text-xs sm:text-sm mt-1">Gérez vos applications en toute simplicité</p>
             </div>
-            <button id="add-app-btn" class="tech-border px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/50">
-                <span class="flex items-center">
+            <button id="add-app-btn" class="tech-border w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 rounded-lg text-sm sm:text-base font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/50">
+                <span class="flex items-center justify-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
-                    Nouvelle Application
+                    <span class="hidden sm:inline">Nouvelle Application</span>
+                    <span class="sm:hidden">Ajouter</span>
                 </span>
             </button>
         </div>
@@ -57,7 +64,7 @@
         </div>
 
         <!-- Applications Grid -->
-        <div id="applications-container" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="applications-container" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             <!-- Les cartes d'applications seront ajoutées ici dynamiquement -->
         </div>
 
@@ -75,10 +82,10 @@
     </main>
 
     <!-- Modal Ajouter/Modifier Application -->
-    <div id="app-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="glassmorphism rounded-2xl p-8 w-full max-w-2xl shadow-2xl animate-modal">
-            <div class="flex justify-between items-center mb-6">
-                <h3 id="modal-title" class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+    <div id="app-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
+        <div class="glassmorphism rounded-2xl p-4 sm:p-6 md:p-8 w-full max-w-2xl shadow-2xl animate-modal my-8">
+            <div class="flex justify-between items-center mb-4 sm:mb-6">
+                <h3 id="modal-title" class="text-lg sm:text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
                     Nouvelle Application
                 </h3>
                 <button id="close-modal-btn" class="text-gray-400 hover:text-white transition-colors">
@@ -88,27 +95,27 @@
                 </button>
             </div>
 
-            <form id="app-form" class="space-y-6">
+            <form id="app-form" class="space-y-4 sm:space-y-6">
                 <input type="hidden" id="app-id">
                 
                 <div>
                     <label for="app-name" class="block text-sm font-medium mb-2 text-cyan-300">Nom de l'application *</label>
                     <input type="text" id="app-name" required
-                           class="w-full px-4 py-3 bg-slate-900/50 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-300 placeholder-gray-500 text-white"
+                           class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-slate-900/50 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-300 placeholder-gray-500 text-white"
                            placeholder="Mon Application">
                 </div>
 
                 <div>
                     <label for="app-description" class="block text-sm font-medium mb-2 text-cyan-300">Description</label>
                     <textarea id="app-description" rows="3"
-                              class="w-full px-4 py-3 bg-slate-900/50 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-300 placeholder-gray-500 text-white resize-none"
+                              class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-slate-900/50 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-300 placeholder-gray-500 text-white resize-none"
                               placeholder="Description de votre application"></textarea>
                 </div>
 
                 <div>
                     <label for="app-url" class="block text-sm font-medium mb-2 text-cyan-300">URL d'accès *</label>
                     <input type="url" id="app-url" required
-                           class="w-full px-4 py-3 bg-slate-900/50 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-300 placeholder-gray-500 text-white"
+                           class="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base bg-slate-900/50 border border-cyan-500/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-300 placeholder-gray-500 text-white"
                            placeholder="https://example.com">
                 </div>
 
@@ -120,9 +127,9 @@
 
                 <div id="form-error" class="hidden text-red-300 text-sm bg-red-500/10 border border-red-500/30 rounded-lg p-3"></div>
 
-                <div class="flex space-x-4">
+                <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                     <button type="submit" id="submit-btn"
-                            class="flex-1 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/50">
+                            class="flex-1 py-2.5 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg shadow-cyan-500/50">
                         <span id="submit-text">Créer l'application</span>
                         <span id="submit-loading" class="hidden">
                             <svg class="animate-spin h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24">
@@ -132,7 +139,7 @@
                         </span>
                     </button>
                     <button type="button" id="cancel-btn"
-                            class="px-6 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-all duration-300">
+                            class="px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-all duration-300">
                         Annuler
                     </button>
                 </div>
@@ -142,23 +149,23 @@
 
     <!-- Modal Confirmation Suppression -->
     <div id="delete-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="glassmorphism rounded-2xl p-8 w-full max-w-md shadow-2xl animate-modal">
+        <div class="glassmorphism rounded-2xl p-6 sm:p-8 w-full max-w-md shadow-2xl animate-modal">
             <div class="text-center">
                 <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-500/20 mb-4">
                     <svg class="h-6 w-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                     </svg>
                 </div>
-                <h3 class="text-lg font-medium text-white mb-2">Confirmer la suppression</h3>
-                <p class="text-gray-400 mb-6">Êtes-vous sûr de vouloir supprimer cette application ? Cette action est irréversible.</p>
+                <h3 class="text-base sm:text-lg font-medium text-white mb-2">Confirmer la suppression</h3>
+                <p class="text-sm sm:text-base text-gray-400 mb-6">Êtes-vous sûr de vouloir supprimer cette application ? Cette action est irréversible.</p>
                 
-                <div class="flex space-x-4">
+                <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                     <button id="confirm-delete-btn"
-                            class="flex-1 py-3 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 rounded-lg font-semibold transition-all duration-300 shadow-lg shadow-red-500/50">
+                            class="flex-1 py-2.5 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 rounded-lg font-semibold transition-all duration-300 shadow-lg shadow-red-500/50">
                         Supprimer
                     </button>
                     <button id="cancel-delete-btn"
-                            class="flex-1 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-all duration-300">
+                            class="flex-1 py-2.5 sm:py-3 text-sm sm:text-base bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-all duration-300">
                         Annuler
                     </button>
                 </div>

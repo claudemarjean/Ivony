@@ -316,8 +316,16 @@ async function deleteApplication() {
 // Déconnexion
 async function handleLogout() {
     try {
+        // Révoquer les tokens (global) puis nettoyer la session locale
+        await supabaseClient.auth.signOut({ scope: 'global' });
         await supabaseClient.auth.signOut();
-        window.location.href = 'index.html';
+
+        // Nettoyer les éventuels restes de session stockés
+        Object.keys(localStorage)
+            .filter((key) => key.startsWith('sb-'))
+            .forEach((key) => localStorage.removeItem(key));
+
+        window.location.replace('index.html');
     } catch (error) {
         console.error('Erreur de déconnexion:', error);
     }
