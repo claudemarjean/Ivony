@@ -332,9 +332,6 @@ function displayTable() {
             <td class="px-6 py-4 whitespace-nowrap text-sm">
                 ${formatStatus(consultation)}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm">
-                ${formatActions(consultation.ip_address)}
-            </td>
         `;
 
         consultationsTable.appendChild(row);
@@ -368,7 +365,6 @@ function displayCards() {
                     </div>
                     <div class="flex items-center gap-2">
                         ${formatStatus(consultation)}
-                        ${formatActions(consultation.ip_address, true)}
                     </div>
                 </div>
 
@@ -475,7 +471,7 @@ function formatIpBadge(ipAddress) {
     const ipStatus = ipAccessControl.get(ipAddress);
     
     if (!ipStatus) {
-        return '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-500/20 text-gray-400 border border-gray-500/30">Neutre</span>';
+        return '<span class="ip-status-badge inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-500/20 text-gray-400 border border-gray-500/30 cursor-pointer hover:bg-gray-500/30 transition-colors" data-ip="' + escapeHtml(ipAddress) + '" data-status="none">Neutre</span>';
     }
     
     if (ipStatus.status === 'blacklist') {
@@ -483,57 +479,10 @@ function formatIpBadge(ipAddress) {
     }
     
     if (ipStatus.status === 'whitelist') {
-        return '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-500/30">Whitelist</span>';
+        return '<span class="ip-status-badge inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-500/30 cursor-pointer hover:bg-green-500/30 transition-colors" data-ip="' + escapeHtml(ipAddress) + '" data-status="whitelist">Whitelist</span>';
     }
     
     return '';
-}
-
-/**
- * Formater le menu d'actions pour une IP
- */
-function formatActions(ipAddress, isMobile = false) {
-    if (!ipAddress) return '-';
-    
-    const ipStatus = ipAccessControl.get(ipAddress);
-    const currentStatus = ipStatus?.status || 'none';
-    
-    if (isMobile) {
-        // Version mobile : bouton menu contextuel
-        return `
-            <button class="ip-action-btn text-gray-400 hover:text-cyan-300 transition-colors p-1" 
-                    data-ip="${escapeHtml(ipAddress)}"
-                    data-current-status="${currentStatus}">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
-                </svg>
-            </button>
-        `;
-    }
-    
-    // Version desktop : boutons inline
-    return `
-        <div class="flex gap-2">
-            <button class="ip-blacklist-action px-3 py-1 rounded-lg text-xs font-medium transition-all duration-300 
-                          ${currentStatus === 'blacklist' ? 'bg-red-500/30 text-red-300 cursor-not-allowed' : 'bg-red-500/10 text-red-400 hover:bg-red-500/20'}" 
-                    data-ip="${escapeHtml(ipAddress)}"
-                    ${currentStatus === 'blacklist' ? 'disabled' : ''}>
-                <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
-                </svg>
-                ${currentStatus === 'blacklist' ? 'Blacklisté' : 'Blacklist'}
-            </button>
-            <button class="ip-whitelist-action px-3 py-1 rounded-lg text-xs font-medium transition-all duration-300
-                          ${currentStatus === 'whitelist' ? 'bg-green-500/30 text-green-300 cursor-not-allowed' : 'bg-green-500/10 text-green-400 hover:bg-green-500/20'}" 
-                    data-ip="${escapeHtml(ipAddress)}"
-                    ${currentStatus === 'whitelist' ? 'disabled' : ''}>
-                <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                ${currentStatus === 'whitelist' ? 'Whitelisté' : 'Whitelist'}
-            </button>
-        </div>
-    `;
 }
 
 /**
@@ -581,36 +530,14 @@ function closeIpModal() {
  * Configurer les boutons d'action IP
  */
 function setupActionButtons() {
-    // Boutons desktop blacklist
-    document.querySelectorAll('.ip-blacklist-action').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+    // Clics sur les badges de statut IP pour ouvrir la modale de blacklist
+    document.querySelectorAll('.ip-status-badge').forEach(badge => {
+        badge.addEventListener('click', (e) => {
             const ip = e.currentTarget.dataset.ip;
-            if (ip && !e.currentTarget.disabled) {
-                openIpModal(ip, 'blacklist');
-            }
-        });
-    });
-    
-    // Boutons desktop whitelist
-    document.querySelectorAll('.ip-whitelist-action').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const ip = e.currentTarget.dataset.ip;
-            if (ip && !e.currentTarget.disabled) {
-                openIpModal(ip, 'whitelist');
-            }
-        });
-    });
-    
-    // Boutons mobile (menu contextuel)
-    document.querySelectorAll('.ip-action-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const ip = e.currentTarget.dataset.ip;
-            const currentStatus = e.currentTarget.dataset.currentStatus;
+            const status = e.currentTarget.dataset.status;
             
-            if (ip) {
-                // Afficher un menu contextuel simple
-                const action = currentStatus === 'blacklist' ? 'whitelist' : 'blacklist';
-                openIpModal(ip, action);
+            if (ip && (status === 'none' || status === 'whitelist')) {
+                openIpModal(ip, 'blacklist');
             }
         });
     });
