@@ -28,6 +28,10 @@ const logoutBtn = document.getElementById('logout-btn');
 const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
 const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
 
+// Menu mobile
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+
 // Form inputs
 const appIdInput = document.getElementById('app-id');
 const appNameInput = document.getElementById('app-name');
@@ -47,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function initTabs() {
-    const tabs = document.querySelectorAll('.tab-btn[data-section]');
+    const tabs = document.querySelectorAll('.tab-btn[data-section], .tab-btn-mobile[data-section]');
     const sections = document.querySelectorAll('[data-section-target]');
 
     if (!tabs.length || !sections.length) return;
@@ -56,8 +60,10 @@ function initTabs() {
         tab.addEventListener('click', async () => {
             const target = tab.getAttribute('data-section');
 
-            tabs.forEach((btn) => {
-                const isActive = btn === tab;
+            // Gérer l'état actif pour tous les boutons (desktop et mobile)
+            const allTabs = document.querySelectorAll('.tab-btn[data-section], .tab-btn-mobile[data-section]');
+            allTabs.forEach((btn) => {
+                const isActive = btn.getAttribute('data-section') === target;
                 btn.classList.toggle('tab-active', isActive);
                 btn.classList.toggle('tab-muted', !isActive);
             });
@@ -74,7 +80,7 @@ function initTabs() {
         });
     });
 
-    const defaultTab = document.querySelector('.tab-btn.tab-active[data-section]') || tabs[0];
+    const defaultTab = document.querySelector('.tab-btn.tab-active[data-section], .tab-btn-mobile.tab-active[data-section]') || tabs[0];
     if (defaultTab) {
         defaultTab.click();
     }
@@ -406,6 +412,20 @@ function setupEventListeners() {
     confirmDeleteBtn.addEventListener('click', deleteApplication);
     cancelDeleteBtn.addEventListener('click', cancelDelete);
     
+    // Menu mobile
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    }
+    
+    // Fermer le menu mobile en cliquant sur un onglet
+    if (mobileMenu) {
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target.closest('.tab-btn-mobile')) {
+                closeMobileMenu();
+            }
+        });
+    }
+    
     // Fermer les modals en cliquant à l'extérieur
     appModal.addEventListener('click', (e) => {
         if (e.target === appModal) closeModal();
@@ -430,4 +450,23 @@ function formatDate(dateString) {
         month: 'long', 
         day: 'numeric' 
     });
+}
+
+// Gestion du menu mobile
+function toggleMobileMenu() {
+    if (mobileMenu.classList.contains('hidden')) {
+        openMobileMenu();
+    } else {
+        closeMobileMenu();
+    }
+}
+
+function openMobileMenu() {
+    mobileMenu.classList.remove('hidden');
+    mobileMenuBtn.classList.add('active');
+}
+
+function closeMobileMenu() {
+    mobileMenu.classList.add('hidden');
+    mobileMenuBtn.classList.remove('active');
 }
