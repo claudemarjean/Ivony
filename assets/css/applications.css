@@ -265,6 +265,45 @@ table tbody tr:hover {
     transition: background-color 0.2s ease;
 }
 
+/* Amélioration de l'affichage mobile des cartes de consultation */
+@media (max-width: 1023px) {
+    #consultations-cards .ip-status-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        white-space: nowrap;
+    }
+    
+    #consultations-cards .font-mono {
+        word-break: break-all;
+        font-size: 0.75rem;
+    }
+    
+    #consultations-cards h4 {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    /* S'assurer que les badges sont toujours visibles */
+    #consultations-cards .flex-wrap {
+        align-items: flex-start;
+    }
+}
+
+/* Ajustements spécifiques pour les très petits écrans */
+@media (max-width: 480px) {
+    #consultations-cards > div {
+        padding: 1rem;
+    }
+    
+    #consultations-cards .space-y-3 > * + * {
+        margin-top: 0.75rem;
+    }
+    
+    #consultations-cards .gap-3 {
+        gap: 0.5rem;
+    }
+}
+
 /* Select filters styling */
 select {
     cursor: pointer;
