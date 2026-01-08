@@ -395,46 +395,51 @@ function displayCards() {
         card.innerHTML = `
             <div class="space-y-3">
                 <!-- En-tête -->
-                <div class="flex justify-between items-start">
-                    <div class="flex items-start gap-3">
-                        <input type="checkbox" class="consultation-checkbox w-4 h-4 mt-1 rounded border-cyan-500/30 bg-slate-900/50 text-cyan-500 focus:ring-2 focus:ring-cyan-400 cursor-pointer" data-id="${consultation.id}">
-                        <div>
-                            <h4 class="font-semibold text-cyan-300 text-sm">
+                <div class="flex justify-between items-start gap-2">
+                    <div class="flex items-start gap-3 flex-1 min-w-0">
+                        <input type="checkbox" class="consultation-checkbox w-4 h-4 mt-1 flex-shrink-0 rounded border-cyan-500/30 bg-slate-900/50 text-cyan-500 focus:ring-2 focus:ring-cyan-400 cursor-pointer" data-id="${consultation.id}">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-semibold text-cyan-300 text-sm truncate">
                                 ${escapeHtml(applicationsMap.get(consultation.application_id) || 'N/A')}
                             </h4>
-                        <p class="text-xs text-gray-500 mt-1">
-                            ${formatDateTime(consultation.visited_at)}
-                        </p>
+                            <p class="text-xs text-gray-500 mt-1">
+                                ${formatDateTime(consultation.visited_at)}
+                            </p>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 flex-shrink-0">
                         ${formatStatus(consultation)}
                     </div>
                 </div>
 
                 <!-- Infos -->
-                <div class="grid grid-cols-2 gap-3 text-xs">
-                    <div class="col-span-2">
-                        <span class="text-gray-500">Adresse IP</span>
-                        <div class="flex items-center gap-2 mt-1">
-                            <p class="text-gray-300 font-mono">${escapeHtml(consultation.ip_address || 'N/A')}</p>
+                <div class="grid grid-cols-1 gap-3 text-xs">
+                    <div>
+                        <span class="text-gray-500 block mb-1">Adresse IP</span>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <p class="text-gray-300 font-mono text-xs break-all">${escapeHtml(consultation.ip_address || 'N/A')}</p>
                             ${formatIpBadge(consultation.ip_address)}
                         </div>
                     </div>
-                    <div>
-                        <span class="text-gray-500">Localisation</span>
-                        <p class="text-gray-300 mt-1">${formatLocation(consultation)}</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <span class="text-gray-500 block mb-1">Localisation</span>
+                            <p class="text-gray-300 text-xs break-words">${formatLocation(consultation)}</p>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block mb-1">Appareil</span>
+                            <p class="text-gray-300 text-xs break-words">${formatDevice(consultation)}</p>
+                        </div>
                     </div>
-                    <div>
-                        <span class="text-gray-500">Appareil</span>
-                        <p class="text-gray-300 mt-1">${formatDevice(consultation)}</p>
-                    </div>
-                    <div>
-                        <span class="text-gray-500">Navigateur</span>
-                        <p class="text-gray-300 mt-1">${escapeHtml(consultation.browser || 'N/A')}</p>
-                    </div>
-                    <div>
-                        <span class="text-gray-500">OS</span>
-                        <p class="text-gray-300 mt-1">${escapeHtml(consultation.os || 'N/A')}</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <span class="text-gray-500 block mb-1">Navigateur</span>
+                            <p class="text-gray-300 text-xs break-words">${escapeHtml(consultation.browser || 'N/A')}</p>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 block mb-1">OS</span>
+                            <p class="text-gray-300 text-xs break-words">${escapeHtml(consultation.os || 'N/A')}</p>
+                        </div>
                     </div>
                 </div>
             </div>
