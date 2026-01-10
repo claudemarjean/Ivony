@@ -371,7 +371,7 @@ async function handleLogout() {
             .filter((key) => key.startsWith('sb-'))
             .forEach((key) => localStorage.removeItem(key));
 
-        window.location.replace('index.html');
+        window.location.replace('/');
     } catch (error) {
         console.error('Erreur de déconnexion:', error);
     }

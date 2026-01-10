@@ -1,13 +1,11 @@
-// Router pour URLs propres
+// Router pour URLs propres (sans .html)
 function navigateTo(path) {
-  // En développement, ajouter .html
-  // En production, le serveur gère les redirections
-  const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  
-  if (isDev && !path.endsWith('.html')) {
-    path = path + '.html';
+  // Enlever .html si présent
+  if (path.endsWith('.html')) {
+    path = path.replace('.html', '');
   }
   
+  // Rediriger vers l'URL propre
   window.location.href = path;
 }
 

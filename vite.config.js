@@ -22,9 +22,23 @@ export default defineConfig({
   publicDir: 'assets',
   server: {
     port: 3000,
-    open: true
+    open: true,
+    // Rewrites pour URLs propres en dev
+    proxy: {
+      '^/applications$': {
+        target: 'http://localhost:3000',
+        rewrite: () => '/applications.html'
+      }
+    }
   },
   preview: {
-    port: 4173
+    port: 4173,
+    // Rewrites pour URLs propres en preview
+    proxy: {
+      '^/applications$': {
+        target: 'http://localhost:4173',
+        rewrite: () => '/applications.html'
+      }
+    }
   }
 });
