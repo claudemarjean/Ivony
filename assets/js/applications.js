@@ -95,7 +95,7 @@ async function checkAuth() {
         
         if (!session) {
             console.log('Pas de session, redirection vers login');
-            window.location.href = 'index.html';
+            window.location.href = IVONY_CONFIG?.ROUTES?.LOGIN || '/';
             return false;
         }
         
@@ -125,7 +125,7 @@ async function checkAuth() {
         
     } catch (error) {
         console.error('Erreur d\'authentification:', error);
-        window.location.href = 'index.html';
+        window.location.href = IVONY_CONFIG?.ROUTES?.LOGIN || '/';
         return false;
     }
 }

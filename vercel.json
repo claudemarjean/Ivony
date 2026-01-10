@@ -54,6 +54,10 @@
   ],
   "rewrites": [
     {
+      "source": "/applications",
+      "destination": "/applications.html"
+    },
+    {
       "source": "/login",
       "destination": "/index.html"
     },
@@ -61,5 +65,7 @@
       "source": "/dashboard",
       "destination": "/applications.html"
     }
-  ]
+  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist"
 }

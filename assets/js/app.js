@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (error) throw error;
             if (session) {
                 console.log('Session trouvée, redirection vers applications...');
-                window.location.href = 'applications.html';
+                window.location.href = IVONY_CONFIG?.ROUTES?.DASHBOARD || '/applications';
             } else {
                 console.log('Aucune session, affichage login');
                 showLogin();
