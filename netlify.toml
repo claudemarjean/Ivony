@@ -3,11 +3,11 @@
 
 # Configuration du build
 [build]
-  # Dossier contenant les fichiers statiques (si pas de build)
-  publish = "."
+  # Dossier de sortie Vite
+  publish = "dist"
   
-  # Commande de build (laisser vide si pas de build process)
-  command = ""
+  # Commande de build Vite
+  command = "npm run build"
 
 # Headers de sécurité
 [[headers]]
@@ -46,7 +46,12 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
-# Redirections (si nécessaire)
+# Redirections pour URLs propres
+[[redirects]]
+  from = "/applications"
+  to = "/applications.html"
+  status = 200
+
 [[redirects]]
   from = "/login"
   to = "/index.html"

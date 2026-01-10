@@ -1,0 +1,16 @@
+/* Configuration pour les URLs propres sans .html */
+/*
+  Pour les URLs propres en production, configurez votre hébergement:
+  
+  Netlify (_redirects):
+  /applications  /applications.html  200
+  /*  /index.html  200
+  
+  Vercel (vercel.json):
+  {
+    "rewrites": [
+      { "source": "/applications", "destination": "/applications.html" },
+      { "source": "/(.*)", "destination": "/index.html" }
+    ]
+  }
+*/

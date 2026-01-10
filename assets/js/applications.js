@@ -95,7 +95,7 @@ async function checkAuth() {
         
         if (!session) {
             console.log('Pas de session, redirection vers login');
-            window.location.href = 'index.html';
+            window.location.href = IVONY_CONFIG?.ROUTES?.LOGIN || '/';
             return false;
         }
         
@@ -125,7 +125,7 @@ async function checkAuth() {
         
     } catch (error) {
         console.error('Erreur d\'authentification:', error);
-        window.location.href = 'index.html';
+        window.location.href = IVONY_CONFIG?.ROUTES?.LOGIN || '/';
         return false;
     }
 }
@@ -371,7 +371,7 @@ async function handleLogout() {
             .filter((key) => key.startsWith('sb-'))
             .forEach((key) => localStorage.removeItem(key));
 
-        window.location.replace('index.html');
+        window.location.replace('/');
     } catch (error) {
         console.error('Erreur de déconnexion:', error);
     }

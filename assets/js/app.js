@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (error) throw error;
             if (session) {
                 console.log('Session trouvée, redirection vers applications...');
-                window.location.href = 'applications.html';
+                window.location.href = IVONY_CONFIG?.ROUTES?.DASHBOARD || '/applications';
             } else {
                 console.log('Aucune session, affichage login');
                 showLogin();
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log('Connexion réussie, données:', data);
 
             // Rediriger vers la page de gestion des applications
-            window.location.replace('applications.html');
+            window.location.replace('/applications');
         } catch (error) {
             console.error('Erreur de connexion :', error);
             loginError.textContent = error.message === 'Invalid login credentials'
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (event === 'SIGNED_IN' && session) {
             // Ancienne modale/écran de déconnexion supprimé : on redirige directement
-            window.location.replace('applications.html');
+            window.location.replace('/applications');
         } else if (event === 'SIGNED_OUT') {
             showLogin();
         }
